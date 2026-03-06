@@ -1,0 +1,46 @@
+services:
+
+  # fastapi:
+  #   build: 
+  #     context: ..
+  #     dockerfile: docker/url_shortener_api/Dockerfile
+  #   container_name: url_shortener_api
+  #   ports:
+  #     - "8000:8000"
+  #   networks:
+  #     - backend
+  #   restart: always
+  #   env_file:
+  #     - ./env/.env.app
+    
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_ARGS=--requirepass omaressam --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - backend
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./env/.env.postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+volumes:
+  redis_data:
+  postgres_data:
+
+networks:
+  backend:
